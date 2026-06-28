@@ -10,6 +10,7 @@ import AdminSettingsPage from './pages/AdminSettingsPage'
 import AdminServicesPage from './pages/AdminServicesPage'
 import AdminSlotsPage from './pages/AdminSlotsPage'
 import BookingPage from './pages/BookingPage'
+import BusinessLandingPage from './pages/BusinessLandingPage'
 import TrackPage from './pages/TrackPage'
 import BookingStatusRoute from './routes/BookingStatusRoute'
 import PaymentRoute from './routes/PaymentRoute'
@@ -17,6 +18,15 @@ import { getPageTitle } from './utils/pageTitles'
 
 function App() {
   const location = useLocation()
+
+  if (location.pathname === '/business' || location.pathname === '/business/') {
+    return <BusinessLandingPage />
+  }
+
+  return <AppointmentApp location={location} />
+}
+
+function AppointmentApp({ location }) {
   const app = useSamvidaApp()
 
   return (

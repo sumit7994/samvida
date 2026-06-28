@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shivani Gautam Makeup Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --obsidian: #0a0a0c;
+    --void: #111118;
+    --surface: #16161f;
+    --surface2: #1e1e2a;
+    --gold: #c9a96e;
+    --gold-light: #e8cfa0;
+    --gold-dim: #8a7050;
+    --rose: #d4a0b0;
+    --rose-dim: #9a6a7a;
+    --cream: #f0ead8;
+    --muted: #888898;
+    --border: rgba(201,169,110,0.18);
+    --border-soft: rgba(255,255,255,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--obsidian);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  canvas#particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.55;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(10,10,12,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(0);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.8rem;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold-light);
+    text-decoration: none;
+    transition: all 0.3s;
+    background: transparent;
+  }
+  .nav-cta:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--obsidian);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+    padding: 0 2rem;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,169,110,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 0.2em;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    letter-spacing: 0.05em;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    padding: 1rem 2.8rem;
+    background: var(--gold);
+    color: var(--obsidian);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-ghost {
+    padding: 1rem 2.8rem;
+    border: 1px solid rgba(201,169,110,0.35);
+    color: var(--gold-light);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-ghost:hover { border-color: var(--gold); background: rgba(201,169,110,0.05); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+  .scroll-text {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  /* STRIP */
+  .strip {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--void);
+    padding: 1rem 0;
+    overflow: hidden;
+  }
+  .strip-inner {
+    display: flex;
+    gap: 3rem;
+    width: max-content;
+    animation: marquee 20s linear infinite;
+  }
+  .strip-item {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .strip-item::after { content: '✦'; color: var(--gold); font-size: 0.5rem; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--void);
+  }
+  .stat {
+    padding: 3rem 2rem;
+    text-align: center;
+    border-right: 1px solid var(--border-soft);
+    transition: background 0.3s;
+  }
+  .stat:last-child { border-right: none; }
+  .stat:hover { background: rgba(201,169,110,0.03); }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    display: block;
+  }
+
+  /* SECTION COMMON */
+  section { position: relative; z-index: 1; }
+
+  .section-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold-light); }
+  .section-body {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--muted);
+    max-width: 520px;
+  }
+
+  /* ABOUT */
+  .about {
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    background: var(--void);
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-frame {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .about-frame-inner {
+    position: absolute;
+    inset: 16px;
+    border: 1px solid rgba(201,169,110,0.12);
+  }
+  .about-frame-label {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  .about-frame svg {
+    width: 80px;
+    height: 80px;
+    opacity: 0.08;
+  }
+  .about-ornament {
+    position: absolute;
+    top: -1.5rem;
+    right: -1.5rem;
+    width: 100px;
+    height: 100px;
+    border-top: 1px solid var(--gold-dim);
+    border-right: 1px solid var(--gold-dim);
+  }
+  .about-ornament2 {
+    position: absolute;
+    bottom: -1.5rem;
+    left: -1.5rem;
+    width: 80px;
+    height: 80px;
+    border-bottom: 1px solid var(--gold-dim);
+    border-left: 1px solid var(--gold-dim);
+  }
+
+  /* SERVICES */
+  .services { padding: 8rem 4rem; background: var(--obsidian); }
+  .services-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 5rem;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-soft);
+    border: 1px solid var(--border-soft);
+  }
+  .service-card {
+    background: var(--void);
+    padding: 2.5rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.4s;
+  }
+  .service-card:hover { background: var(--surface); }
+  .service-card:hover::after { width: 100%; }
+  .service-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    display: block;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.6rem;
+  }
+  .service-desc {
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+  .service-price {
+    margin-top: 1.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  /* PROCESS */
+  .process {
+    padding: 8rem 4rem;
+    background: var(--void);
+    border-top: 1px solid var(--border-soft);
+  }
+  .process-header { text-align: center; margin-bottom: 5rem; }
+  .process-header .section-eyebrow { justify-content: center; }
+  .process-header .section-eyebrow::before { display: none; }
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .process-grid::before {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    left: 12.5%;
+    right: 12.5%;
+    height: 1px;
+    background: var(--border);
+    z-index: 0;
+  }
+  .process-step {
+    padding: 0 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .process-dot {
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    background: var(--void);
+    position: relative;
+    z-index: 1;
+    transition: border-color 0.3s, background 0.3s;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gold-dim);
+  }
+  .process-step:hover .process-dot {
+    border-color: var(--gold);
+    background: rgba(201,169,110,0.05);
+    color: var(--gold-light);
+  }
+  .process-step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.6rem;
+  }
+  .process-step-desc {
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  /* GALLERY */
+  .gallery { padding: 8rem 4rem; background: var(--obsidian); }
+  .gallery-header { margin-bottom: 3rem; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 250px 250px;
+    gap: 1px;
+    background: var(--border-soft);
+  }
+  .gallery-item {
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s;
+  }
+  .gallery-item:first-child { grid-row: 1 / 3; }
+  .gallery-item:hover { background: var(--surface2); }
+  .gallery-item svg { opacity: 0.04; width: 60px; }
+  .gallery-item-label {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all 0.3s;
+  }
+  .gallery-item:hover .gallery-item-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .gallery-cta { margin-top: 2rem; text-align: right; }
+
+  /* TESTIMONIALS */
+  .testimonials {
+    padding: 8rem 4rem;
+    background: var(--void);
+    border-top: 1px solid var(--border-soft);
+  }
+  .testimonials-header { margin-bottom: 4rem; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-soft); }
+  .testimonial-card {
+    background: var(--void);
+    padding: 2.5rem;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .testimonial-card:hover { background: var(--surface); }
+  .testimonial-stars {
+    display: flex;
+    gap: 0.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .star { color: var(--gold); font-size: 0.7rem; }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .testimonial-author {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  /* CONTACT */
+  .contact {
+    padding: 8rem 4rem;
+    background: var(--obsidian);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    border-top: 1px solid var(--border-soft);
+  }
+  .contact-info-items { margin-top: 3rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .contact-info-item:last-child { border-bottom: none; }
+  .contact-icon {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .contact-info-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .contact-info-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-info-value:hover { color: var(--gold-light); }
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-input, .form-select, .form-textarea {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    color: var(--cream);
+    padding: 0.85rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    appearance: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--gold-dim);
+    background: var(--surface2);
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(136,136,152,0.5); }
+  .form-textarea { resize: vertical; min-height: 120px; }
+  .form-select { cursor: pointer; }
+  option { background: var(--surface); }
+  .form-submit {
+    padding: 1rem 2.5rem;
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold-light);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    align-self: flex-start;
+  }
+  .form-submit:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--obsidian);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    background: var(--void);
+    border-top: 1px solid var(--border-soft);
+    padding: 3rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  .footer-copy {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--gold-light); }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .about, .contact { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
+    .services { padding: 5rem 1.5rem; }
+    .services-header { grid-template-columns: 1fr; gap: 1rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .process { padding: 5rem 1.5rem; }
+    .process-grid { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+    .process-grid::before { display: none; }
+    .gallery { padding: 5rem 1.5rem; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .gallery-item:first-child { grid-row: auto; }
+    .testimonials { padding: 5rem 1.5rem; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; padding: 2.5rem 1.5rem; }
+    .footer-links { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Shivani <span>Gautam</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Portfolio</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="/track" target="_top">Track</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="/" target="_top" class="nav-cta">Book Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <p class="hero-eyebrow">Khatauli · Uttar Pradesh · Since 2020</p>
+    <h1 class="hero-title">
+      Where Beauty<br><em>Becomes Art</em>
+    </h1>
+    <p class="hero-subtitle">Master Makeup Artist · Bridal · Editorial · Special Events</p>
+    <div class="hero-actions">
+      <a href="/" target="_top" class="btn-primary">Book a Session</a>
+      <a href="#gallery" class="btn-ghost">View Portfolio</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE STRIP -->
+<div class="strip">
+  <div class="strip-inner" id="stripInner"></div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stat">
+    <span class="stat-num">5.0</span>
+    <span class="stat-label">Google Rating</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">20+</span>
+    <span class="stat-label">Happy Reviews</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">500+</span>
+    <span class="stat-label">Looks Created</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">∞</span>
+    <span class="stat-label">Memories Made</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-visual reveal">
+    <div class="about-frame">
+      <div class="about-frame-inner"></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5">
+        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+      <span class="about-frame-label">Shivani Gautam · MUA</span>
+    </div>
+    <div class="about-ornament"></div>
+    <div class="about-ornament2"></div>
+  </div>
+  <div class="about-text reveal" style="transition-delay:0.15s">
+    <p class="section-eyebrow">The Artist</p>
+    <h2 class="section-title">Crafting <em>Confidence</em><br>One Brushstroke at a Time</h2>
+    <p class="section-body">Shivani Gautam is a professional makeup artist based in Khatauli, renowned for transforming her clients through meticulous artistry and a deep understanding of individual beauty. From intimate bridal moments to editorial shoots, every look is a collaboration.</p>
+    <p class="section-body" style="margin-top:1rem">Trained in advanced techniques and committed to using only premium products, Shivani brings a studio-quality experience to every client — wherever they are.</p>
+    <div style="margin-top:2.5rem; display:flex; gap:2rem;">
+      <div>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold-light); display:block">Bridal</span>
+        <span style="font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted)">Specialist</span>
+      </div>
+      <div style="width:1px; background:var(--border-soft)"></div>
+      <div>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold-light); display:block">HD</span>
+        <span style="font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted)">Airbrush</span>
+      </div>
+      <div style="width:1px; background:var(--border-soft)"></div>
+      <div>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:2rem; color:var(--gold-light); display:block">Home</span>
+        <span style="font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted)">Visits</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header">
+    <div class="reveal">
+      <p class="section-eyebrow">What We Offer</p>
+      <h2 class="section-title">Services <em>Tailored</em><br>to Your Vision</h2>
+    </div>
+    <div class="reveal" style="transition-delay:0.1s">
+      <p class="section-body">From classic elegance to bold editorial looks — every service is customised to your unique features, occasion, and preferences.</p>
+      <a href="/" target="_top" class="btn-ghost" style="display:inline-block; margin-top:1.5rem">Book Online</a>
+    </div>
+  </div>
+  <div class="services-grid reveal" style="transition-delay:0.2s">
+    <div class="service-card">
+      <span class="service-icon">◈</span>
+      <h3 class="service-name">Bridal Makeup</h3>
+      <p class="service-desc">The most important day of your life deserves perfection. Long-lasting, photography-ready bridal looks crafted with premium products.</p>
+      <p class="service-price">Enquire for pricing</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">◇</span>
+      <h3 class="service-name">HD Airbrush</h3>
+      <p class="service-desc">Flawless, lightweight finish that photographs beautifully. Ideal for brides, receptions, and high-definition photography sessions.</p>
+      <p class="service-price">Enquire for pricing</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">◉</span>
+      <h3 class="service-name">Party & Reception</h3>
+      <p class="service-desc">Glamorous, statement looks for every celebration — receptions, sangeet, mehndi, and cocktail evenings.</p>
+      <p class="service-price">Enquire for pricing</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">◌</span>
+      <h3 class="service-name">Editorial & Shoots</h3>
+      <p class="service-desc">Creative, camera-ready looks for professional photo shoots, portfolio sessions, and brand collaborations.</p>
+      <p class="service-price">Enquire for pricing</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">⬡</span>
+      <h3 class="service-name">Engagement Looks</h3>
+      <p class="service-desc">Radiant, natural-to-glam looks for your engagement ceremony — designed to make you feel effortlessly beautiful.</p>
+      <p class="service-price">Enquire for pricing</p>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">✦</span>
+      <h3 class="service-name">Home Visits</h3>
+      <p class="service-desc">Studio-quality artistry delivered to your doorstep. Get pampered in the comfort of your own home, on your schedule.</p>
+      <p class="service-price">Enquire for pricing</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-header reveal">
+    <p class="section-eyebrow">The Experience</p>
+    <h2 class="section-title" style="text-align:center">Your Journey to <em>Radiance</em></h2>
+  </div>
+  <div class="process-grid">
+    <div class="process-step reveal" style="transition-delay:0.05s">
+      <div class="process-dot">I</div>
+      <h3 class="process-step-title">Consultation</h3>
+      <p class="process-step-desc">We discuss your vision, skin type, occasion, and reference looks to understand exactly what you want.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.1s">
+      <div class="process-dot">II</div>
+      <h3 class="process-step-title">Trial Session</h3>
+      <p class="process-step-desc">For brides and special events, a trial ensures the final look is perfected before the big day.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.15s">
+      <div class="process-dot">III</div>
+      <h3 class="process-step-title">The Application</h3>
+      <p class="process-step-desc">Meticulous, professional application using premium products tailored to your skin tone and features.</p>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.2s">
+      <div class="process-dot">IV</div>
+      <h3 class="process-step-title">Final Reveal</h3>
+      <p class="process-step-desc">You see the completed look, love it, and walk out feeling like the most beautiful version of yourself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery-header reveal">
+    <p class="section-eyebrow">Portfolio</p>
+    <h2 class="section-title">Every Look,<br>a <em>Masterpiece</em></h2>
+  </div>
+  <div class="gallery-grid reveal" style="transition-delay:0.1s">
+    <div class="gallery-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 7h7l-6 4 2 7-5-3.5L7 20l2-7-6-4h7z"/></svg>
+      <span class="gallery-item-label">Bridal Classic</span>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      <span class="gallery-item-label">Reception Glam</span>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18"/></svg>
+      <span class="gallery-item-label">Editorial Look</span>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 22,20 2,20"/></svg>
+      <span class="gallery-item-label">Sangeet Night</span>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 9h9l-7 5 3 9-8-6-8 6 3-9-7-5h9z"/></svg>
+      <span class="gallery-item-label">Mehndi Look</span>
+    </div>
+  </div>
+  <div class="gallery-cta reveal" style="transition-delay:0.2s">
+    <a href="https://www.instagram.com/muashivaniigautam" target="_blank" rel="noopener" class="btn-ghost">
+      Follow on Instagram ↗
+    </a>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-header reveal">
+    <p class="section-eyebrow">Clients Say</p>
+    <h2 class="section-title">Voices of <em>Confidence</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal" style="transition-delay:0.05s">
+      <div class="testimonial-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-text">"Shivani understood exactly what I envisioned for my wedding day. The look lasted all day and I have never felt more beautiful in my life."</p>
+      <p class="testimonial-author">Priya S. · Bride, 2024</p>
+    </div>
+    <div class="testimonial-card reveal" style="transition-delay:0.1s">
+      <div class="testimonial-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-text">"Absolutely professional and talented. The HD airbrush makeup was flawless in every photograph. Highly recommend for any special occasion."</p>
+      <p class="testimonial-author">Neha R. · Reception, 2024</p>
+    </div>
+    <div class="testimonial-card reveal" style="transition-delay:0.15s">
+      <div class="testimonial-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-text">"The home visit service is incredibly convenient. Shivani brings a true studio experience to your home — no compromise on quality whatsoever."</p>
+      <p class="testimonial-author">Ritu M. · Engagement, 2023</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <p class="section-eyebrow">Get in Touch</p>
+    <h2 class="section-title">Reserve Your <em>Date</em></h2>
+    <p class="section-body">Bookings fill up quickly, especially for wedding season. Reach out early to secure your spot.</p>
+    <div class="contact-info-items">
+      <div class="contact-info-item">
+        <div class="contact-icon">✦</div>
+        <div>
+          <p class="contact-info-label">Call or WhatsApp</p>
+          <a href="tel:08860560826" class="contact-info-value">+91 88605 60826</a>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">◉</div>
+        <div>
+          <p class="contact-info-label">Instagram</p>
+          <a href="https://www.instagram.com/muashivaniigautam" target="_blank" class="contact-info-value">@muashivaniigautam</a>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">◌</div>
+        <div>
+          <p class="contact-info-label">Studio Address</p>
+          <span class="contact-info-value" style="font-size:0.9rem; line-height:1.6">1st Floor, opp. Post Office<br>Saini Nagar, Khatauli — 251201</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reveal" style="transition-delay:0.15s">
+    <p style="font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:2rem">Send a Booking Enquiry</p>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input type="text" class="form-input" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Service Required</label>
+        <select class="form-select">
+          <option value="">Select a service</option>
+          <option>Bridal Makeup</option>
+          <option>HD Airbrush</option>
+          <option>Party & Reception</option>
+          <option>Editorial & Shoots</option>
+          <option>Engagement Look</option>
+          <option>Home Visit</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Event Date</label>
+        <input type="text" class="form-input" placeholder="DD / MM / YYYY">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="Tell Shivani about your vision, skin concerns, or any questions..."></textarea>
+      </div>
+      <button class="form-submit" onclick="handleSubmit(this)">Send Enquiry</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Shivani Gautam Makeup Studio</div>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/muashivaniigautam" target="_blank" class="footer-link">Instagram</a>
+    <a href="tel:08860560826" class="footer-link">Call</a>
+    <a href="https://maps.app.goo.gl/6eQrYkLzSd55CWa39" target="_blank" class="footer-link">Directions</a>
+  </div>
+  <p class="footer-copy">© 2025 Shivani Gautam Makeup Studio · Khatauli, UP</p>
+</footer>
+
+<script>
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const GOLD = 'rgba(201,169,110,';
+  const ROSE = 'rgba(212,160,176,';
+
+  for (let i = 0; i < 90; i++) {
+    particles.push({
+      x: Math.random() * 2000,
+      y: Math.random() * 2000,
+      r: Math.random() * 1.4 + 0.2,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      color: Math.random() > 0.5 ? GOLD : ROSE,
+      alpha: Math.random() * 0.5 + 0.1,
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: 0.005 + Math.random() * 0.01
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.pulse += p.pulseSpeed;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+      const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + a + ')';
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  // Strip
+  const labels = ['Bridal Specialist', 'HD Airbrush', 'Party Makeup', 'Home Visits', 'Engagement Looks', 'Editorial Shoots', '5.0 ★ Google Rating', 'Khatauli Studio'];
+  const strip = document.getElementById('stripInner');
+  const doubled = [...labels, ...labels];
+  doubled.forEach(l => {
+    const el = document.createElement('span');
+    el.className = 'strip-item';
+    el.textContent = l;
+    strip.appendChild(el);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // Form submit
+  function handleSubmit(btn) {
+    const phone = document.querySelector('input[type="tel"]').value.trim();
+    const msg = encodeURIComponent('Hi Shivani, I would like to enquire about a booking.');
+    if (phone) {
+      window.open('https://wa.me/918860560826?text=' + msg, '_blank');
+    } else {
+      alert('Please enter your phone number so Shivani can reach you.');
+    }
+  }
+</script>
+</body>
+</html>
