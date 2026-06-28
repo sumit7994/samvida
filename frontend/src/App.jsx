@@ -1,164 +1,56 @@
-import { useMemo, useState } from 'react'
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import AppLayout from './components/AppLayout'
-import { initialBookings, services, slotTimes, today } from './data/mockData'
+import ConfirmModal from './components/ConfirmModal'
+import ProtectedRoute from './components/ProtectedRoute'
+import { useSamvidaApp } from './hooks/useSamvidaApp'
+import AdminBookingsPage from './pages/AdminBookingsPage'
+import AdminLoginPage from './pages/AdminLoginPage'
 import AdminPage from './pages/AdminPage'
+import AdminSettingsPage from './pages/AdminSettingsPage'
+import AdminServicesPage from './pages/AdminServicesPage'
+import AdminSlotsPage from './pages/AdminSlotsPage'
 import BookingPage from './pages/BookingPage'
-import PaymentPage from './pages/PaymentPage'
 import TrackPage from './pages/TrackPage'
-
-const pageTitles = {
-  '/': 'Book an appointment',
-  '/payment': 'Token payment',
-  '/track': 'Track booking',
-  '/admin': 'Admin dashboard',
-}
+import BookingStatusRoute from './routes/BookingStatusRoute'
+import PaymentRoute from './routes/PaymentRoute'
+import { getPageTitle } from './utils/pageTitles'
 
 function App() {
-  const navigate = useNavigate()
   const location = useLocation()
-  const [bookings, setBookings] = useState(initialBookings)
-  const [draft, setDraft] = useState({
-    serviceId: services[0].id,
-    date: today,
-    time: slotTimes[1],
-    customerName: '',
-    phone: '',
-    email: '',
-    notes: '',
-  })
-  const [trackPhone, setTrackPhone] = useState('9876543210')
-  const [selectedBookingId, setSelectedBookingId] = useState('SAM-1025')
-  const [tokenAmount, setTokenAmount] = useState(200)
-  const [message, setMessage] = useState('Ready to accept real appointment requests.')
-
-  const selectedBooking = bookings.find((booking) => booking.id === selectedBookingId) || bookings[0]
-  const trackedBookings = bookings.filter((booking) => booking.phone.includes(trackPhone.trim()))
-  const pendingBookings = bookings.filter((booking) => booking.status === 'pending')
-  const upiBookings = bookings.filter((booking) => booking.status === 'upi_claimed')
-  const confirmedToday = bookings.filter(
-    (booking) => booking.status === 'confirmed' && booking.date === today,
-  )
-
-  const unavailableSlots = useMemo(
-    () =>
-      bookings
-        .filter((booking) => booking.date === draft.date && booking.status !== 'cancelled')
-        .map((booking) => booking.time),
-    [bookings, draft.date],
-  )
-
-  function serviceName(serviceId) {
-    return services.find((service) => service.id === serviceId)?.name || 'Service'
-  }
-
-  function updateBooking(id, patch) {
-    setBookings((current) =>
-      current.map((booking) => (booking.id === id ? { ...booking, ...patch } : booking)),
-    )
-  }
-
-  function submitBooking(event) {
-    event.preventDefault()
-    if (!draft.customerName.trim() || !draft.phone.trim()) {
-      setMessage('Customer name and phone are required.')
-      return
-    }
-
-    const newBooking = {
-      id: `SAM-${Math.floor(1000 + Math.random() * 9000)}`,
-      ...draft,
-      status: 'pending',
-      token: 0,
-      paymentMethod: 'none',
-    }
-
-    setBookings((current) => [newBooking, ...current])
-    setSelectedBookingId(newBooking.id)
-    setMessage('Booking request received. Admin can now approve or reject it.')
-    setDraft((current) => ({ ...current, customerName: '', phone: '', email: '', notes: '' }))
-    navigate('/payment')
-  }
-
-  function approveBooking(id) {
-    updateBooking(id, {
-      status: 'payment_pending',
-      token: Number(tokenAmount),
-      paymentMethod: 'none',
-    })
-    setSelectedBookingId(id)
-    setMessage('Approval sent. Customer can pay token through Razorpay or UPI.')
-  }
-
-  function rejectBooking(id) {
-    updateBooking(id, { status: 'cancelled', notes: 'Rejected by admin' })
-    setMessage('Booking rejected and slot released.')
-  }
-
-  function markPaid(method) {
-    if (!selectedBooking) return
-    updateBooking(selectedBooking.id, {
-      status: method === 'upi' ? 'upi_claimed' : 'confirmed',
-      paymentMethod: method,
-    })
-    setMessage(
-      method === 'upi'
-        ? 'UPI claim sent to admin for manual confirmation.'
-        : 'Razorpay test payment verified and booking confirmed.',
-    )
-  }
-
-  function confirmUpi(id) {
-    updateBooking(id, { status: 'confirmed', paymentMethod: 'upi' })
-    setMessage('UPI payment manually confirmed. Appointment is locked.')
-  }
-
-  function addWalkIn() {
-    const walkIn = {
-      id: `SAM-${Math.floor(1000 + Math.random() * 9000)}`,
-      customerName: 'Walk-in Customer',
-      phone: '9999900000',
-      email: '',
-      serviceId: 'consult',
-      date: today,
-      time: '18:30',
-      status: 'confirmed',
-      token: 0,
-      paymentMethod: 'none',
-      notes: 'Added from admin desk',
-    }
-
-    setBookings((current) => [walkIn, ...current])
-    setMessage('Walk-in booking added as confirmed.')
-  }
-
-  function openPayment(id) {
-    setSelectedBookingId(id)
-    navigate('/payment')
-  }
+  const app = useSamvidaApp()
 
   return (
-    <AppLayout headline={pageTitles[location.pathname] || 'Samvida'} message={message}>
+    <AppLayout headline={getPageTitle(location.pathname)} message={app.message} business={app.business}>
       <Routes>
         <Route
           path="/"
           element={
             <BookingPage
-              draft={draft}
-              setDraft={setDraft}
-              submitBooking={submitBooking}
-              unavailableSlots={unavailableSlots}
+              draft={app.draft}
+              setDraft={app.setDraft}
+              submitBooking={app.submitBooking}
+              unavailableSlots={app.unavailableSlots}
+              services={app.activeServices}
+              slotTimes={app.slotTimes}
+              business={app.business}
+              loading={app.loading.services || app.loading.slots || app.loading.bookingSubmit}
             />
           }
         />
         <Route
-          path="/payment"
+          path="/booking/:bookingId"
+          element={<BookingStatusRoute serviceName={app.serviceName} setMessage={app.setMessage} />}
+        />
+        <Route
+          path="/payment/:bookingId"
           element={
-            <PaymentPage
-              selectedBooking={selectedBooking}
-              tokenAmount={tokenAmount}
-              serviceName={serviceName}
-              markPaid={markPaid}
+            <PaymentRoute
+              tokenAmount={app.tokenAmount}
+              serviceName={app.serviceName}
+              markPaid={app.markPaid}
+              setMessage={app.setMessage}
+              busyAction={app.busyAction}
+              business={app.business}
             />
           }
         />
@@ -166,34 +58,129 @@ function App() {
           path="/track"
           element={
             <TrackPage
-              trackPhone={trackPhone}
-              setTrackPhone={setTrackPhone}
-              trackedBookings={trackedBookings}
-              serviceName={serviceName}
-              openPayment={openPayment}
+              trackPhone={app.trackPhone}
+              setTrackPhone={app.setTrackPhone}
+              trackCode={app.trackCode}
+              setTrackCode={app.setTrackCode}
+              trackedBookings={app.trackedBookings}
+              serviceName={app.serviceName}
+              openBooking={app.openBooking}
+              onTrackSearch={app.loadTrackedBookings}
+              loading={app.loading.tracking}
             />
           }
         />
         <Route
+          path="/admin/login"
+          element={<AdminLoginPage setMessage={app.setMessage} onLogin={app.loadAdminBookings} />}
+        />
+        <Route
           path="/admin"
           element={
-            <AdminPage
-              bookings={bookings}
-              pendingBookings={pendingBookings}
-              upiBookings={upiBookings}
-              confirmedToday={confirmedToday}
-              tokenAmount={tokenAmount}
-              setTokenAmount={setTokenAmount}
-              serviceName={serviceName}
-              approveBooking={approveBooking}
-              rejectBooking={rejectBooking}
-              confirmUpi={confirmUpi}
-              addWalkIn={addWalkIn}
-            />
+            <ProtectedRoute>
+              <AdminPage
+                bookings={app.bookings}
+                pendingBookings={app.pendingBookings}
+                upiBookings={app.upiBookings}
+                confirmedToday={app.confirmedToday}
+                tokenAmount={app.tokenAmount}
+                setTokenAmount={app.setTokenAmount}
+                serviceName={app.serviceName}
+                approveBooking={app.approveBooking}
+                rejectBooking={app.rejectBooking}
+                proposeBookingTime={app.proposeBookingTime}
+                cancelBooking={app.cancelBooking}
+                markCompleted={app.markCompleted}
+                markNoShow={app.markNoShow}
+                confirmUpi={app.confirmUpi}
+                addWalkIn={app.addWalkIn}
+                logoutAdmin={app.logoutAdmin}
+                services={app.activeServices}
+                slotDate={app.slotDate}
+                setSlotDate={app.setSlotDate}
+                slotTimes={app.availableSlotTimes}
+                loading={app.loading.adminBookings}
+                busyAction={app.busyAction}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/bookings"
+          element={
+            <ProtectedRoute>
+              <AdminBookingsPage
+                bookings={app.bookings}
+                services={app.services}
+                serviceName={app.serviceName}
+                cancelBooking={app.cancelBooking}
+                markCompleted={app.markCompleted}
+                markNoShow={app.markNoShow}
+                logoutAdmin={app.logoutAdmin}
+                loading={app.loading.adminBookings}
+                busyAction={app.busyAction}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/services"
+          element={
+            <ProtectedRoute>
+              <AdminServicesPage
+                services={app.services}
+                addService={app.addService}
+                updateService={app.updateService}
+                toggleService={app.toggleService}
+                logoutAdmin={app.logoutAdmin}
+                loading={app.loading.services}
+                busyAction={app.busyAction}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/slots"
+          element={
+            <ProtectedRoute>
+              <AdminSlotsPage
+                slotTimes={app.adminSlotTimes}
+                blockedSlots={app.blockedSlots}
+                slotDate={app.slotDate}
+                setSlotDate={app.setSlotDate}
+                addSlotTime={app.addSlotTime}
+                removeSlotTime={app.removeSlotTime}
+                toggleBlockedSlot={app.toggleBlockedSlot}
+                logoutAdmin={app.logoutAdmin}
+                loading={app.loading.slots}
+                busyAction={app.busyAction}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <ProtectedRoute>
+              <AdminSettingsPage
+                business={app.business}
+                onBusinessSaved={app.handleBusinessSaved}
+                setMessage={app.setMessage}
+                logoutAdmin={app.logoutAdmin}
+                confirmAction={app.confirmAction}
+                busyAction={app.busyAction}
+                setBusyAction={app.setBusyAction}
+              />
+            </ProtectedRoute>
           }
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <ConfirmModal
+        request={app.confirmRequest}
+        onCancel={() => app.resolveConfirm(false)}
+        onConfirm={() => app.resolveConfirm(true)}
+      />
     </AppLayout>
   )
 }
