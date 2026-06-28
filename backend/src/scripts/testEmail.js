@@ -17,7 +17,7 @@ async function testEmail() {
   })
 
   if (result?.skipped) {
-    console.log('Email skipped. Check EMAIL_HOST, EMAIL_USER, and EMAIL_PASS in .env.')
+    console.log('Email skipped. Check Gmail OAuth2 or SMTP email settings in .env.')
   } else {
     console.log(`Test email sent to ${to}`)
   }

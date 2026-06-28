@@ -35,20 +35,16 @@ function AppLayout({ children, headline, message, business }) {
           ))}
         </nav>
 
-        <NavLink
-          to="/business"
-          className="mt-auto block overflow-hidden rounded-lg border border-white/10 bg-white/8 p-4 text-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur transition hover:border-emerald-300/50 hover:bg-white/12"
-        >
+        <div className="mt-auto overflow-hidden rounded-lg border border-white/10 bg-white/8 p-4 text-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur">
           <span className="text-xs font-black uppercase tracking-[0.16em] text-rose-300">
             {business?.category || 'Appointment booking'}
           </span>
           <h2 className="mt-2 text-2xl font-black text-white">{business?.name || 'Samvida'}</h2>
           {business?.address && <p className="mt-3 text-sm font-medium text-zinc-300">{business.address}</p>}
-          {business?.phone && <p className="mt-2 text-sm font-bold text-zinc-200">{business.phone}</p>}
           <p className="mt-2 text-sm font-bold text-emerald-200">
             {business?.openTime || '09:00'} to {business?.closeTime || '20:00'}
           </p>
-        </NavLink>
+        </div>
       </aside>
 
       <section className="min-w-0 p-4 sm:p-6 lg:p-8">

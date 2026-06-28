@@ -11,3 +11,6 @@ logs
 *.log
 uploads
 tmp
+*.pem
+*.key
+*.ppk

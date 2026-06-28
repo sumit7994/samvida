@@ -10,6 +10,13 @@ node_modules/
 */.env.*
 !*/.env.example
 
+# SSH / cloud keys
+*.pem
+*.key
+*.ppk
+id_rsa*
+id_ed25519*
+
 # Build output
 dist/
 */dist/
@@ -36,4 +43,3 @@ Thumbs.db
 # Local Codex/runtime files
 .codex/
 .agents/
-
