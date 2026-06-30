@@ -7,10 +7,12 @@ const pageTitles = {
   '/admin/slots': 'Manage slots',
   '/admin/settings': 'Business settings',
   '/admin/login': 'Admin login',
+  '/admin/forgot-password': 'Reset password',
 }
 
 export function getPageTitle(pathname) {
   if (pathname.startsWith('/booking/')) return 'Booking status'
   if (pathname.startsWith('/payment/')) return 'Token payment'
+  if (pathname.startsWith('/admin/reset-password/')) return 'Reset password'
   return pageTitles[pathname] || 'Samvida'
 }

@@ -13,6 +13,18 @@ router.post(
   validateRequest,
   authController.login,
 )
+router.post(
+  '/forgot-password',
+  body('email').isEmail().withMessage('Valid email is required'),
+  validateRequest,
+  authController.forgotPassword,
+)
+router.post(
+  '/reset-password/:token',
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  validateRequest,
+  authController.resetPassword,
+)
 router.get('/me', protect, authController.me)
 router.put(
   '/me',

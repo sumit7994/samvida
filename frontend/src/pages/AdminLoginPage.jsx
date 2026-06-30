@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ButtonLoader from '../components/ButtonLoader'
+import PasswordField from '../components/PasswordField'
 import api from '../services/api'
 
 function AdminLoginPage({ setMessage, onLogin }) {
@@ -59,12 +60,11 @@ function AdminLoginPage({ setMessage, onLogin }) {
 
         <label className="form-label">
           Password
-          <input
-            className="form-field"
-            type="password"
+          <PasswordField
             value={credentials.password}
             onChange={(event) => setCredentials({ ...credentials, password: event.target.value })}
             placeholder="Enter password"
+            autoComplete="current-password"
           />
         </label>
 
@@ -74,6 +74,10 @@ function AdminLoginPage({ setMessage, onLogin }) {
           {loading && <ButtonLoader />}
           {loading ? 'Logging in' : 'Login'}
         </button>
+
+        <Link className="text-center text-sm font-black text-zinc-600 hover:text-zinc-950" to="/admin/forgot-password">
+          Forgot password?
+        </Link>
       </form>
     </section>
   )

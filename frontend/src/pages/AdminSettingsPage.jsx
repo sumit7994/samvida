@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import AdminNav from '../components/AdminNav'
 import ButtonLoader from '../components/ButtonLoader'
 import PageLoader from '../components/PageLoader'
+import PasswordField from '../components/PasswordField'
 import api from '../services/api'
 
 const categories = ['salon', 'clinic', 'coaching', 'spa', 'gym', 'other']
@@ -471,12 +472,11 @@ function AdminSettingsPage({
 
           <label className="form-label">
             New password
-            <input
-              className="form-field"
-              type="password"
+            <PasswordField
               value={ownerForm.password}
               onChange={(event) => updateOwnerField('password', event.target.value)}
               minLength={6}
+              autoComplete="new-password"
             />
           </label>
 

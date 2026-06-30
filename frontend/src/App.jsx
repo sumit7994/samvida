@@ -4,8 +4,10 @@ import ConfirmModal from './components/ConfirmModal'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useSamvidaApp } from './hooks/useSamvidaApp'
 import AdminBookingsPage from './pages/AdminBookingsPage'
+import AdminForgotPasswordPage from './pages/AdminForgotPasswordPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminPage from './pages/AdminPage'
+import AdminResetPasswordPage from './pages/AdminResetPasswordPage'
 import AdminSettingsPage from './pages/AdminSettingsPage'
 import AdminServicesPage from './pages/AdminServicesPage'
 import AdminSlotsPage from './pages/AdminSlotsPage'
@@ -83,6 +85,14 @@ function AppointmentApp({ location }) {
         <Route
           path="/admin/login"
           element={<AdminLoginPage setMessage={app.setMessage} onLogin={app.loadAdminBookings} />}
+        />
+        <Route
+          path="/admin/forgot-password"
+          element={<AdminForgotPasswordPage setMessage={app.setMessage} />}
+        />
+        <Route
+          path="/admin/reset-password/:token"
+          element={<AdminResetPasswordPage setMessage={app.setMessage} />}
         />
         <Route
           path="/admin"
